@@ -11,7 +11,6 @@ buildscript {
         classpath 'com.palantir.gradle.consistentversions:gradle-consistent-versions:3.2.0'
         classpath 'com.palantir.gradle.externalpublish:gradle-external-publish-plugin:1.24.0'
         classpath 'com.palantir.gradle.failure-reports:gradle-failure-reports:1.16.0'
-        classpath 'com.palantir.gradle.gitversion:gradle-git-version:4.0.0'
         classpath 'com.palantir.gradle.guide:gradle-guide:1.13.0'
         classpath 'com.palantir.gradle.idea-configuration:gradle-idea-configuration:0.5.0'
         classpath 'com.palantir.gradle.jdks:gradle-jdks:0.69.0'
@@ -26,7 +25,6 @@ buildscript {
 
 apply plugin: 'com.palantir.external-publish'
 apply plugin: 'com.palantir.failure-reports'
-apply plugin: 'com.palantir.git-version'
 apply plugin: 'com.palantir.gradle-guide'
 apply plugin: 'com.palantir.jdks'
 apply plugin: 'com.palantir.jdks.latest'
@@ -35,7 +33,8 @@ apply plugin: 'com.palantir.baseline-java-versions'
 apply plugin: 'com.palantir.consistent-versions'
 apply plugin: 'com.palantir.baseline-java-versions'
 
-version System.env.CIRCLE_TAG ?: gitVersion()
+
+version '3.0.0'
 
 allprojects {
     apply plugin: 'com.palantir.baseline-null-away'
