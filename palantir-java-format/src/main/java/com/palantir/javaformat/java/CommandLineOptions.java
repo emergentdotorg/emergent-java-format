@@ -33,6 +33,7 @@ final class CommandLineOptions {
     private final ImmutableList<Integer> offsets;
     private final ImmutableList<Integer> lengths;
     private final boolean aosp;
+    private final boolean emergentStyle;
     private final boolean palantirStyle;
     private final boolean version;
     private final boolean help;
@@ -120,6 +121,11 @@ final class CommandLineOptions {
     /** Use AOSP style instead of Google Style (4-space indentation). */
     boolean aosp() {
         return aosp;
+    }
+
+    /** Use Emergent style instead of Google Style. */
+    boolean emergentStyle() {
+        return emergentStyle;
     }
 
     /** Use Palantir style instead of Google Style. */
