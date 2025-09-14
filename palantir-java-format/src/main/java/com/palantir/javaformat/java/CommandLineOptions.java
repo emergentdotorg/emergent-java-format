@@ -18,6 +18,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableRangeSet;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Command line options for google-java-format.
@@ -55,6 +56,7 @@ final class CommandLineOptions {
             ImmutableList<Integer> offsets,
             ImmutableList<Integer> lengths,
             boolean aosp,
+            boolean emergentStyle,
             boolean palantirStyle,
             boolean version,
             boolean help,
@@ -74,6 +76,7 @@ final class CommandLineOptions {
         this.offsets = offsets;
         this.lengths = lengths;
         this.aosp = aosp;
+        this.emergentStyle = emergentStyle;
         this.palantirStyle = palantirStyle;
         this.version = version;
         this.help = help;
@@ -204,6 +207,7 @@ final class CommandLineOptions {
         private final ImmutableList.Builder<Integer> lengths = ImmutableList.builder();
         private boolean inPlace = false;
         private boolean aosp = false;
+        private boolean emergentStyle = false;
         private boolean palantirStyle = false;
         private boolean version = false;
         private boolean help = false;
@@ -248,6 +252,11 @@ final class CommandLineOptions {
 
         Builder aosp(boolean aosp) {
             this.aosp = aosp;
+            return this;
+        }
+
+        Builder emergentStyle(boolean emergentStyle) {
+            this.emergentStyle = emergentStyle;
             return this;
         }
 
@@ -312,7 +321,12 @@ final class CommandLineOptions {
         }
 
         CommandLineOptions build() {
-            Preconditions.checkArgument(!aosp || !palantirStyle, "Cannot use both aosp and palantir style");
+            Preconditions.checkArgument(
+                    Stream.of(aosp, emergentStyle, palantirStyle)
+                                    .filter(Boolean::booleanValue)
+                                    .count()
+                            <= 1,
+                    "Cannot use both aosp and palantir style");
             return new CommandLineOptions(
                     files.build(),
                     inPlace,
@@ -321,6 +335,7 @@ final class CommandLineOptions {
                     offsets.build(),
                     lengths.build(),
                     aosp,
+                    emergentStyle,
                     palantirStyle,
                     version,
                     help,

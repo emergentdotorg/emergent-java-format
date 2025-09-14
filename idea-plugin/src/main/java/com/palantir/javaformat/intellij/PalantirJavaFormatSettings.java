@@ -22,6 +22,7 @@ import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.palantir.javaformat.java.FormatterService;
 import com.palantir.javaformat.java.JavaFormatterOptions;
+import com.palantir.javaformat.java.JavaFormatterOptions.Style;
 import com.palantir.sls.versions.OrderableSlsVersion;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -146,7 +147,7 @@ public class PalantirJavaFormatSettings implements PersistentStateComponent<Pala
         private Optional<List<URI>> implementationClassPath = Optional.empty();
         private Optional<URI> nativeImageClassPath = Optional.empty();
 
-        public JavaFormatterOptions.Style style = JavaFormatterOptions.Style.PALANTIR;
+        public JavaFormatterOptions.Style style = Style.EMERGENT;
 
         public void setImplementationClassPath(@Nullable List<String> value) {
             implementationClassPath = Optional.ofNullable(value)

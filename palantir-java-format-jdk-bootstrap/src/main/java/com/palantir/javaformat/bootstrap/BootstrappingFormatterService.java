@@ -140,7 +140,7 @@ public final class BootstrappingFormatterService implements FormatterService {
 
             return args
                     // Use palantir style
-                    .add("--palantir")
+                    .add("--emergent")
                     // Trailing "-" enables formatting stdin -> stdout
                     .add("-")
                     .build();

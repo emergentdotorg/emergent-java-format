@@ -19,6 +19,7 @@ import static com.palantir.javaformat.java.FileBasedTests.isRecreate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.palantir.javaformat.Newlines;
+import com.palantir.javaformat.java.JavaFormatterOptions.Style;
 import com.palantir.javaformat.jupiter.ParameterizedClass;
 import java.io.IOException;
 import java.util.List;
@@ -84,10 +85,7 @@ public class FormatterIntegrationTest {
 
     private static Formatter createFormatter() {
         return new Formatter(
-                JavaFormatterOptions.builder()
-                        .style(JavaFormatterOptions.Style.PALANTIR)
-                        .build(),
-                isDebugMode());
+                JavaFormatterOptions.builder().style(Style.EMERGENT).build(), isDebugMode());
     }
 
     @TestTemplate

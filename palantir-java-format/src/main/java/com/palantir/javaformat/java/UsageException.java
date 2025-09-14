@@ -41,6 +41,8 @@ final class UsageException extends Exception {
         "    File name to use for diagnostics when formatting standard input (default is <stdin>).",
         "  --aosp, -aosp, -a",
         "    Use AOSP style instead of Google Style (4-space indentation).",
+        "  --emergent, -emergent, -e",
+        "    Use Emergent style instead of Google Style.",
         "  --palantir, -palantir",
         "    Use Palantir style instead of Google Style.",
         "  --fix-imports-only",

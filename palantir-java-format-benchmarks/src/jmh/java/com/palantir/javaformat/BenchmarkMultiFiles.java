@@ -69,7 +69,7 @@ public class BenchmarkMultiFiles {
         ProcessBuilder p = new ProcessBuilder();
         p.command(Stream.concat(
                         Stream.of(
-                                Path.of(System.getenv("NATIVE_IMAGE_CLASSPATH")).toString(), "-i", "--palantir"),
+                                Path.of(System.getenv("NATIVE_IMAGE_CLASSPATH")).toString(), "-i", "--emergent"),
                         state.filesToFormat.stream())
                 .collect(Collectors.toList()));
         Process process = p.inheritIO().start();
@@ -93,7 +93,7 @@ public class BenchmarkMultiFiles {
                                 "--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
                                 "com.palantir.javaformat.java.Main",
                                 "-i",
-                                "--palantir"),
+                                "--emergent"),
                         state.filesToFormat.stream())
                 .collect(Collectors.toList()));
         Process process = p.inheritIO().start();

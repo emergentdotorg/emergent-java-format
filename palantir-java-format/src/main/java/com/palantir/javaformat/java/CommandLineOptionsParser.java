@@ -94,6 +94,11 @@ final class CommandLineOptionsParser {
                 case "-a":
                     optionsBuilder.aosp(true);
                     break;
+                case "--emergent":
+                case "-emergent":
+                case "-e":
+                    optionsBuilder.emergentStyle(true);
+                    break;
                 case "--palantir":
                 case "-palantir":
                     optionsBuilder.palantirStyle(true);
