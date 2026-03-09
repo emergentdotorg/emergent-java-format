@@ -5,7 +5,7 @@
 
   <groupId>org.emergent.javaformat</groupId>
   <artifactId>emergent-java-format-parent</artifactId>
-  <version>3.0-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
@@ -23,7 +23,6 @@
   <modules>
     <module>palantir-java-format</module>
     <module>palantir-java-format-jdk-bootstrap</module>
-    <module>palantir-java-format-native</module>
     <module>palantir-java-format-spi</module>
   </modules>
 
@@ -44,6 +43,15 @@
     <version.immutables>2.12.1</version.immutables>
     <version.slf4j>2.0.17</version.slf4j>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>native</id>
+      <modules>
+        <module>palantir-java-format-native</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <dependencyManagement>
     <dependencies>
@@ -445,6 +453,11 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.10.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.2.2</version>
         </plugin>
@@ -476,6 +489,11 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>3.6.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.6.3</version>
         </plugin>
       </plugins>
     </pluginManagement>

@@ -31,6 +31,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -98,11 +100,15 @@ final class FormatterServicesTest {
     }
 
     private static Stream<FormatterService> getFormatters() {
+        Optional<Path> nativePath = Optional.ofNullable(System.getenv("NATIVE_IMAGE_CLASSPATH"))
+                .map(Path::of)
+                .filter(Files::isExecutable);
+
         return Stream.of(
-                new BootstrappingFormatterService(
-                        javaBinPath(), Runtime.version().feature(), getClasspath()),
-                new NativeImageFormatterService(
-                        Path.of(System.getenv("NATIVE_IMAGE_CLASSPATH").toString())));
+                        new BootstrappingFormatterService(
+                                javaBinPath(), Runtime.version().feature(), getClasspath()),
+                        nativePath.map(NativeImageFormatterService::new).orElse(null))
+                .filter(Objects::nonNull);
     }
 
     private String getTestResourceContent(String resourceName) {

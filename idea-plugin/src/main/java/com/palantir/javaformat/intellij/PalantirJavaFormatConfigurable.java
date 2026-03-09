@@ -52,7 +52,7 @@ class PalantirJavaFormatConfigurable extends BaseConfigurable implements Searcha
     @NotNull
     @Override
     public String getId() {
-        return "palantir-java-format.settings";
+        return "emergent-java-format.settings";
     }
 
     @Nullable
@@ -64,7 +64,7 @@ class PalantirJavaFormatConfigurable extends BaseConfigurable implements Searcha
     @Nls
     @Override
     public String getDisplayName() {
-        return "palantir-java-format Settings";
+        return "emergent-java-format Settings";
     }
 
     @Nullable

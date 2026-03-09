@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
 final class FormatterProvider {
     private static final Logger log = LoggerFactory.getLogger(FormatterProvider.class);
 
-    static final String PLUGIN_ID = "palantir-java-format";
+    static final String PLUGIN_ID = "emergent-java-format";
 
     // Cache to avoid creating a URLClassloader every time we want to format from IntelliJ
     private final LoadingCache<FormatterCacheKey, Optional<FormatterService>> implementationCache =
@@ -127,7 +127,7 @@ final class FormatterProvider {
         IdeaPluginDescriptor ourPlugin = getPluginDescriptor();
         @SuppressWarnings("for-rollout:deprecation")
         Path implDir = ourPlugin.getPath().toPath().resolve("impl");
-        log.debug("Using palantir-java-format implementation bundled with plugin: {}", implDir);
+        log.debug("Using emergent-java-format implementation bundled with plugin: {}", implDir);
         return listDirAsUrlsUnchecked(implDir);
     }
 
@@ -135,16 +135,16 @@ final class FormatterProvider {
     private static List<Path> getImplementationUrls(
             Optional<List<URI>> implementationClassPath, boolean useBundledImplementation) {
         if (useBundledImplementation) {
-            log.debug("Using palantir-java-format implementation bundled with plugin");
+            log.debug("Using emergent-java-format implementation bundled with plugin");
             return getBundledImplementationUrls();
         }
         return implementationClassPath
                 .map(classpath -> {
-                    log.debug("Using palantir-java-format implementation defined by URIs: {}", classpath);
+                    log.debug("Using emergent-java-format implementation defined by URIs: {}", classpath);
                     return getProvidedImplementationUrls(classpath);
                 })
                 .orElseGet(() -> {
-                    log.debug("Using palantir-java-format implementation bundled with plugin");
+                    log.debug("Using emergent-java-format implementation bundled with plugin");
                     return getBundledImplementationUrls();
                 });
     }

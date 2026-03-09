@@ -64,3 +64,6 @@ node_modules/
 
 # Maven
 target/
+
+idea-plugin/.intellijPlatform/
+idea-plugin/gradle.properties

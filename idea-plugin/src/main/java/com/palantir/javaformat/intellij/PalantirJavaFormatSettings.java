@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 @SuppressWarnings("for-rollout:SameNameButDifferent")
 @State(
         name = "PalantirJavaFormatSettings",
-        storages = {@Storage("palantir-java-format.xml")})
+        storages = {@Storage("emergent-java-format.xml")})
 public class PalantirJavaFormatSettings implements PersistentStateComponent<PalantirJavaFormatSettings.State> {
 
     @SuppressWarnings("for-rollout:SameNameButDifferent")

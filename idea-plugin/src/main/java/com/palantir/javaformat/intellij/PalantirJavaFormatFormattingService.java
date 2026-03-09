@@ -57,7 +57,7 @@ class PalantirJavaFormatFormattingService extends AsyncDocumentFormattingService
 
     @Override
     protected @NotNull @NlsSafe String getName() {
-        return "palantir-java-format";
+        return "emergent-java-format";
     }
 
     @Override

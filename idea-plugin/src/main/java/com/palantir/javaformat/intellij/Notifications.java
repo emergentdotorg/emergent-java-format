@@ -18,11 +18,11 @@ package com.palantir.javaformat.intellij;
 
 class Notifications {
 
-    static final String GENERIC_ERROR_NOTIFICATION_GROUP = "palantir-java-format error";
-    static final String PARSING_ERROR_NOTIFICATION_GROUP = "palantir-java-format parsing error";
+    static final String GENERIC_ERROR_NOTIFICATION_GROUP = "emergent-java-format error";
+    static final String PARSING_ERROR_NOTIFICATION_GROUP = "emergent-java-format parsing error";
     static final String PARSING_ERROR_TITLE = PARSING_ERROR_NOTIFICATION_GROUP;
 
     static String parsingErrorMessage(String filename) {
-        return "palantir-java-format failed. Does " + filename + " have syntax errors?";
+        return "emergent-java-format failed. Does " + filename + " have syntax errors?";
     }
 }
