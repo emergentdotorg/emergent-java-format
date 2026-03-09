@@ -154,6 +154,7 @@
             <phase>validate</phase>
           </execution>
           -->
+          <!--
           <execution>
             <goals>
               <goal>select-jdk-toolchain</goal>
@@ -162,6 +163,7 @@
               <version>[21,22)</version>
             </configuration>
           </execution>
+          -->
         </executions>
       </plugin>
     </plugins>
