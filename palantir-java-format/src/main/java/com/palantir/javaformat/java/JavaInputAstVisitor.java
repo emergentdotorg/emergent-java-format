@@ -1834,13 +1834,13 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
         sync(node);
         markForPartialFormat();
         builder.forcedBreak();
-        if (node.getExpression() == null) {
+        if (node.getExpressions().isEmpty()) {
             token("default", plusTwo);
             token(":");
         } else {
             token("case", plusTwo);
             builder.space();
-            scan(node.getExpression(), null);
+            scan(node.getExpressions(), null);
             token(":");
         }
         boolean isBlock =

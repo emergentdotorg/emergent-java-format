@@ -27,6 +27,7 @@ import java.util.Optional;
 final class CommandLineOptions {
 
     private final ImmutableList<String> files;
+    private final ImmutableList<String> sourcePaths;
     private final boolean inPlace;
     private final ImmutableRangeSet<Integer> lines;
     private final ImmutableRangeSet<Integer> characterRanges;
@@ -48,6 +49,7 @@ final class CommandLineOptions {
 
     CommandLineOptions(
             ImmutableList<String> files,
+            ImmutableList<String> sourcePaths,
             boolean inPlace,
             ImmutableRangeSet<Integer> lines,
             ImmutableRangeSet<Integer> characterRanges,
@@ -67,6 +69,7 @@ final class CommandLineOptions {
             boolean reflowLongStrings,
             boolean outputReplacements) {
         this.files = files;
+        this.sourcePaths = sourcePaths;
         this.inPlace = inPlace;
         this.lines = lines;
         this.characterRanges = characterRanges;
@@ -90,6 +93,11 @@ final class CommandLineOptions {
     /** The files to format. */
     ImmutableList<String> files() {
         return files;
+    }
+
+    /** The sourepath to find files to format. */
+    ImmutableList<String> sourcePaths() {
+        return sourcePaths;
     }
 
     /** Format files in place. */
@@ -192,6 +200,7 @@ final class CommandLineOptions {
     static final class Builder {
 
         private final ImmutableList.Builder<String> files = ImmutableList.builder();
+        private final ImmutableList.Builder<String> sourcePaths = ImmutableList.builder();
         private final ImmutableRangeSet.Builder<Integer> lines = ImmutableRangeSet.builder();
         private final ImmutableRangeSet.Builder<Integer> characterRanges = ImmutableRangeSet.builder();
         private final ImmutableList.Builder<Integer> offsets = ImmutableList.builder();
@@ -215,6 +224,10 @@ final class CommandLineOptions {
 
         ImmutableList.Builder<String> filesBuilder() {
             return files;
+        }
+
+        ImmutableList.Builder<String> sourcePathsBuilder() {
+            return sourcePaths;
         }
 
         Builder inPlace(boolean inPlace) {
@@ -309,6 +322,7 @@ final class CommandLineOptions {
             Preconditions.checkArgument(!aosp || !palantirStyle, "Cannot use both aosp and palantir style");
             return new CommandLineOptions(
                     files.build(),
+                    sourcePaths.build(),
                     inPlace,
                     lines.build(),
                     characterRanges.build(),

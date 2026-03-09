@@ -40,6 +40,7 @@ public class CommandLineOptionsParserTest {
     public void defaults() {
         CommandLineOptions options = CommandLineOptionsParser.parse(Collections.<String>emptyList());
         assertThat(options.files()).isEmpty();
+        assertThat(options.sourcePaths()).isEmpty();
         assertThat(options.stdin()).isFalse();
         assertThat(options.aosp()).isFalse();
         assertThat(options.help()).isFalse();

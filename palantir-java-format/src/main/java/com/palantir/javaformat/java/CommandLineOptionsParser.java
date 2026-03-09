@@ -63,6 +63,10 @@ final class CommandLineOptionsParser {
             }
             // NOTE: update usage information in UsageException when new flags are added
             switch (flag) {
+                case "--source-path":
+                case "-sourcepath":
+                    optionsBuilder.sourcePathsBuilder().add(getValue(flag, it, value));
+                    break;
                 case "-i":
                 case "-r":
                 case "-replace":

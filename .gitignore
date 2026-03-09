@@ -61,3 +61,6 @@ node_modules/
 
 # Gradle JDKs setup
 !gradle/*
+
+# Maven
+target/

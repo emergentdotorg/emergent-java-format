@@ -27,14 +27,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Stream;
 
 /** The main class for the Java formatter CLI. */
 public final class Main {
@@ -110,14 +113,27 @@ public final class Main {
 
     @SuppressWarnings("for-rollout:RedundantControlFlow")
     private int formatFiles(CommandLineOptions parameters, JavaFormatterOptions options) {
-        int numThreads = Math.min(MAX_THREADS, parameters.files().size());
+        Collection<String> files = new TreeSet<>(parameters.files());
+
+        parameters.sourcePaths().forEach(sp -> {
+            try (Stream<Path> walk = Files.walk(Paths.get(sp))) {
+                walk.filter(Files::isRegularFile)
+                        .map(Path::toString)
+                        .filter(f -> f.endsWith(".java"))
+                        .forEach(files::add);
+            } catch (IOException e) {
+                errWriter.println("Could not read source path: " + e.getMessage());
+            }
+        });
+
+        int numThreads = Math.min(MAX_THREADS, files.size());
         ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
 
         Map<Path, String> inputs = new LinkedHashMap<>();
         Map<Path, Future<String>> results = new LinkedHashMap<>();
         boolean allOk = true;
 
-        for (String fileName : parameters.files()) {
+        for (String fileName : files) {
             if (!fileName.endsWith(".java")) {
                 errWriter.println("Skipping non-Java file: " + fileName);
                 continue;
@@ -232,7 +248,9 @@ public final class Main {
             filesToFormat++;
         }
 
-        if (parameters.inPlace() && parameters.files().isEmpty()) {
+        if (parameters.inPlace()
+                && parameters.files().isEmpty()
+                && parameters.sourcePaths().isEmpty()) {
             throw new UsageException("in-place formatting was requested but no files were provided");
         }
         if (parameters.isSelection() && filesToFormat != 1) {
@@ -241,10 +259,11 @@ public final class Main {
         if (parameters.offsets().size() != parameters.lengths().size()) {
             throw new UsageException("-offsets and -lengths flags must be provided in matching pairs");
         }
-        if (filesToFormat <= 0 && !parameters.version() && !parameters.help()) {
+        if (filesToFormat <= 0 && parameters.sourcePaths().isEmpty() && !parameters.version() && !parameters.help()) {
             throw new UsageException("no files were provided");
         }
-        if (parameters.stdin() && !parameters.files().isEmpty()) {
+        if (parameters.stdin()
+                && !(parameters.files().isEmpty() && parameters.sourcePaths().isEmpty())) {
             throw new UsageException("cannot format from standard input and files simultaneously");
         }
         if (parameters.assumeFilename().isPresent() && !parameters.stdin()) {
