@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -11,10 +9,30 @@
     <version>3.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>com.palantir.javaformat</groupId>
-  <artifactId>palantir-java-format-native</artifactId>
-  <name>palantir-java-format-native</name>
-  <description>Palantir Java Format</description>
+  <artifactId>emergent-java-format-native</artifactId>
+  <name>emergent-java-format-native</name>
+  <description>Emergent Java Format</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.emergent.javaformat</groupId>
+      <artifactId>emergent-java-format</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.emergent.javaformat</groupId>
+      <artifactId>emergent-java-format-jdk-bootstrap</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.emergent.javaformat</groupId>
+      <artifactId>emergent-java-format-spi</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
@@ -24,10 +42,10 @@
         <executions>
           <execution>
             <id>select-jdk-toolchain</id>
-            <phase>initialize</phase>
             <goals>
               <goal>select-jdk-toolchain</goal>
             </goals>
+            <phase>initialize</phase>
             <configuration>
               <version>[23,24)</version>
               <!--<version>[17,18)</version>-->
@@ -46,15 +64,6 @@
         <artifactId>native-maven-plugin</artifactId>
         <version>0.11.6-SNAPSHOT</version>
         <extensions>true</extensions>
-        <executions>
-          <execution>
-            <id>build-native</id>
-            <goals>
-              <goal>compile-no-fork</goal>
-            </goals>
-            <phase>package</phase>
-          </execution>
-        </executions>
         <configuration>
           <imageName>emergent-java-format</imageName>
           <fallback>false</fallback>
@@ -82,28 +91,16 @@
             <buildArg>--initialize-at-build-time=com.sun.tools.javac.file.Locations</buildArg>
           </buildArgs>
         </configuration>
+        <executions>
+          <execution>
+            <id>build-native</id>
+            <goals>
+              <goal>compile-no-fork</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.palantir.javaformat</groupId>
-      <artifactId>palantir-java-format</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.palantir.javaformat</groupId>
-      <artifactId>palantir-java-format-jdk-bootstrap</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.palantir.javaformat</groupId>
-      <artifactId>palantir-java-format-spi</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-  </dependencies>
 </project>
