@@ -33,7 +33,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.immutables.value.Value;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class NativeImageFormatterService implements FormatterService {
     private static final ObjectMapper MAPPER =
             JsonMapper.builder().addModule(new GuavaModule()).build();

@@ -27,14 +27,6 @@
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>org.emergent.javaformat</groupId>
-      <artifactId>emergent-java-format-jdk-bootstrap</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    -->
     <dependency>
       <groupId>org.emergent.javaformat</groupId>
       <artifactId>emergent-java-format-spi</artifactId>
@@ -50,14 +42,11 @@
         <artifactId>maven-toolchains-plugin</artifactId>
         <executions>
           <execution>
-            <id>select-jdk-toolchain</id>
             <goals>
               <goal>select-jdk-toolchain</goal>
             </goals>
-            <phase>initialize</phase>
             <configuration>
-              <version>[23,24)</version>
-              <!--<version>[17,18)</version>-->
+              <version>[23)</version>
               <vendor>GraalVM Community</vendor>
             </configuration>
           </execution>
@@ -68,34 +57,6 @@
         <artifactId>native-maven-plugin</artifactId>
         <version>0.11.6-SNAPSHOT</version>
         <extensions>true</extensions>
-        <configuration>
-          <buildArgs>
-            <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
-            <buildArg>-H:+IncludeAllLocales</buildArg>
-            <buildArg>-H:+ReportExceptionStackTraces</buildArg>
-            <buildArg>-H:-UseContainerSupport</buildArg>
-            <buildArg>-march=compatibility</buildArg>
-            <buildArg>--exact-reachability-metadata</buildArg>
-            <buildArg>--initialize-at-build-time=com.sun.tools.javac.file.Locations</buildArg>
-          </buildArgs>
-          <configFiles>
-            <configFile>${project.basedir}/src/main/resources/META-INF/native-image</configFile>
-          </configFiles>
-          <verbose>true</verbose>
-          <fallback>false</fallback>
-          <imageName>${nativeImageName}</imageName>
-          <mainClass>${mainClass}</mainClass>
-          <!--<enforceToolchain>true</enforceToolchain>-->
-          <jvmArgs>
-            <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</jvmArg>
-            <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</jvmArg>
-            <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</jvmArg>
-            <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</jvmArg>
-            <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</jvmArg>
-            <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</jvmArg>
-            <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</jvmArg>
-          </jvmArgs>
-        </configuration>
         <executions>
           <execution>
             <id>build-native</id>
@@ -103,9 +64,67 @@
               <goal>compile-no-fork</goal>
             </goals>
             <phase>package</phase>
+            <configuration>
+              <verbose>true</verbose>
+              <fallback>false</fallback>
+              <enforceToolchain>true</enforceToolchain>
+              <mainClass>${mainClass}</mainClass>
+              <imageName>${nativeImageName}</imageName>
+              <configFiles>
+                <configFile>${project.basedir}/src/main/resources/META-INF/native-image</configFile>
+              </configFiles>
+              <buildArgs>
+                <buildArg>-H:+UnlockExperimentalVMOptions</buildArg>
+                <buildArg>-H:+IncludeAllLocales</buildArg>
+                <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                <buildArg>-H:-UseContainerSupport</buildArg>
+                <buildArg>-march=compatibility</buildArg>
+                <buildArg>--exact-reachability-metadata</buildArg>
+                <buildArg>--initialize-at-build-time=com.sun.tools.javac.file.Locations</buildArg>
+              </buildArgs>
+              <jvmArgs>
+                <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</jvmArg>
+                <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</jvmArg>
+                <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</jvmArg>
+                <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</jvmArg>
+                <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</jvmArg>
+                <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</jvmArg>
+                <jvmArg>--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</jvmArg>
+              </jvmArgs>
+            </configuration>
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-install</id>
+            <configuration>
+              <skip>true</skip>
+            </configuration>
+          </execution>
+          <execution>
+            <id>local-install</id>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+            <phase>pre-integration-test</phase>
+            <configuration>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>${project.artifactId}</artifactId>
+              <version>${project.version}</version>
+              <classifier>native</classifier>
+              <extension>exe</extension>
+              <packaging>bin</packaging>
+              <file>${project.build.directory}/${nativeImageName}</file>
+              <localRepositoryPath>${localTestRepositoryPath}</localRepositoryPath>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!--
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -128,6 +147,7 @@
           </execution>
         </executions>
       </plugin>
+      -->
       <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

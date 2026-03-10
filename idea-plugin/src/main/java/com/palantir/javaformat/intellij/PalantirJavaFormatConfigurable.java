@@ -38,7 +38,7 @@ class PalantirJavaFormatConfigurable extends BaseConfigurable implements Searcha
     private JCheckBox enable;
 
     @SuppressWarnings("for-rollout:RawTypes")
-    private JComboBox styleComboBox;
+    private JComboBox<?> styleComboBox;
 
     private JLabel isUsingNativeImage;
     private JLabel formatterVersion;

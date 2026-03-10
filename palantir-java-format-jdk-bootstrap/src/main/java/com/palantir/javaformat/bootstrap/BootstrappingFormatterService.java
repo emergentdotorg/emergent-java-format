@@ -26,6 +26,7 @@ import com.google.common.collect.Range;
 import com.palantir.javaformat.java.FormatterException;
 import com.palantir.javaformat.java.FormatterService;
 import com.palantir.javaformat.java.Replacement;
+import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
@@ -34,7 +35,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.immutables.value.Value;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class BootstrappingFormatterService implements FormatterService {
     private static final ObjectMapper MAPPER =
             JsonMapper.builder().addModule(new GuavaModule()).build();
@@ -128,7 +131,7 @@ public final class BootstrappingFormatterService implements FormatterService {
                             "-cp",
                             implementationClasspath().stream()
                                     .map(path -> path.toAbsolutePath().toString())
-                                    .collect(Collectors.joining(System.getProperty("path.separator"))))
+                                    .collect(Collectors.joining(File.pathSeparator)))
                     .add(FORMATTER_MAIN_CLASS);
 
             if (!characterRanges().isEmpty()) {

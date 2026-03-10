@@ -1,6 +1,6 @@
 <idea-plugin url="https://github.com/emergentdotorg/emergent-java-format" require-restart="true">
   <id>emergent-java-format</id>
-  <name>emergent-java-format</name>
+  <name>Emergent Java Formatter</name>
   <vendor url="https://github.com/emergentdotorg/emergent-java-format">Emergent.org</vendor>
 
   <depends>com.intellij.modules.java</depends>
@@ -11,7 +11,7 @@
     <formattingService implementation="com.palantir.javaformat.intellij.PalantirJavaFormatFormattingService"/>
     <projectConfigurable instance="com.palantir.javaformat.intellij.PalantirJavaFormatConfigurable"
                          id="emergent-java-format.settings"
-                         displayName="emergent-java-format Settings"
+                         displayName="Emergent Java Formatter Settings"
                          nonDefaultProject="true"/>
     <projectService serviceImplementation="com.palantir.javaformat.intellij.PalantirJavaFormatSettings"/>
     <postStartupActivity implementation="com.palantir.javaformat.intellij.InitialConfigurationStartupActivity"/>

@@ -48,6 +48,6 @@ enum UiFormatterStyle {
         return Arrays.stream(UiFormatterStyle.values())
                 .filter(value -> Objects.equals(value.style, style))
                 .findFirst()
-                .get();
+                .orElseThrow();
     }
 }

@@ -17,10 +17,22 @@
 package com.palantir.javaformat.intellij;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.startup.ProjectActivity;
 import com.intellij.openapi.startup.StartupActivity;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-public final class InitialConfigurationStartupActivity implements StartupActivity.DumbAware {
+public final class InitialConfigurationStartupActivity implements StartupActivity.DumbAware, ProjectActivity {
+
+    @Override
+    public @Nullable Object execute(@NonNull Project project, @NonNull Continuation<? super Unit> continuation) {
+        runActivity(project);
+        return null;
+    }
+
     @Override
     public void runActivity(@NotNull Project project) {
         PalantirJavaFormatSettings settings = PalantirJavaFormatSettings.getInstance(project);

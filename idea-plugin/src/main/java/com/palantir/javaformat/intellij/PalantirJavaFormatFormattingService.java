@@ -36,14 +36,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 class PalantirJavaFormatFormattingService extends AsyncDocumentFormattingService {
     private static final Logger logger = Logger.getInstance(PalantirJavaFormatFormattingService.class);
     private final FormatterProvider formatterProvider = new FormatterProvider();
 
     @Override
-    protected FormattingTask createFormattingTask(@NotNull AsyncFormattingRequest request) {
+    protected FormattingTask createFormattingTask(@NonNull AsyncFormattingRequest request) {
         Project project = request.getContext().getProject();
         PalantirJavaFormatSettings settings = PalantirJavaFormatSettings.getInstance(project);
         Optional<FormatterService> formatter = formatterProvider.get(project, settings);
@@ -51,22 +51,22 @@ class PalantirJavaFormatFormattingService extends AsyncDocumentFormattingService
     }
 
     @Override
-    protected @NotNull String getNotificationGroupId() {
+    protected @NonNull String getNotificationGroupId() {
         return Notifications.PARSING_ERROR_NOTIFICATION_GROUP;
     }
 
     @Override
-    protected @NotNull @NlsSafe String getName() {
+    protected @NonNull @NlsSafe String getName() {
         return "emergent-java-format";
     }
 
     @Override
-    public @NotNull Set<Feature> getFeatures() {
+    public @NonNull Set<Feature> getFeatures() {
         return Set.of(Feature.FORMAT_FRAGMENTS);
     }
 
     @Override
-    public boolean canFormat(@NotNull PsiFile file) {
+    public boolean canFormat(@NonNull PsiFile file) {
         return JavaFileType.INSTANCE.equals(file.getFileType())
                 && PalantirJavaFormatSettings.getInstance(file.getProject()).isEnabled();
     }
@@ -158,9 +158,9 @@ class PalantirJavaFormatFormattingService extends AsyncDocumentFormattingService
         private static boolean isWholeFile(AsyncFormattingRequest request) {
             List<TextRange> ranges = request.getFormattingRanges();
             return ranges.size() == 1
-                    && ranges.get(0).getStartOffset() == 0
+                    && ranges.getFirst().getStartOffset() == 0
                     // using greater than or equal because ranges are sometimes passed inaccurately
-                    && ranges.get(0).getEndOffset() >= request.getDocumentText().length();
+                    && ranges.getFirst().getEndOffset() >= request.getDocumentText().length();
         }
 
         @Override

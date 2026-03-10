@@ -18,11 +18,13 @@ package com.palantir.javaformat.java;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 import java.util.Collection;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * A stable facade for palantir-java-format. The implementation must be ServiceLoaded, to ensure its classpath remains
  * isolated.
  */
+@NullMarked
 public interface FormatterService {
 
     /**

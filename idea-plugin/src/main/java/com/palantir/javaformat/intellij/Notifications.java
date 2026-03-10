@@ -16,6 +16,9 @@
 
 package com.palantir.javaformat.intellij;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 class Notifications {
 
     static final String GENERIC_ERROR_NOTIFICATION_GROUP = "emergent-java-format error";

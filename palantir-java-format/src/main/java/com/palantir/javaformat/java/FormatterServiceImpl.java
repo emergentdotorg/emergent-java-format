@@ -20,7 +20,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Range;
 import com.palantir.javaformat.java.JavaFormatterOptions.Style;
 import java.util.Collection;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 @AutoService(FormatterService.class)
 public final class FormatterServiceImpl implements FormatterService {
 

@@ -16,13 +16,13 @@
 
 package com.palantir.javaformat.intellij;
 
+import com.github.zafarkhaja.semver.Version;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
 import com.palantir.javaformat.java.FormatterService;
 import com.palantir.javaformat.java.JavaFormatterOptions;
-import com.palantir.sls.versions.OrderableSlsVersion;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
@@ -99,15 +99,17 @@ public class PalantirJavaFormatSettings implements PersistentStateComponent<Pala
 
     boolean injectedVersionIsOutdated() {
         Optional<String> formatterVersion = computeFormatterVersion();
-        Optional<OrderableSlsVersion> implementationVersion = OrderableSlsVersion.safeValueOf(
-                getImplementationVersion().map(v -> v.replace(".dirty", "")).orElse(""));
 
-        if (formatterVersion.isEmpty() || implementationVersion.isEmpty()) {
+        Version injectedVersion = formatterVersion.flatMap(Version::tryParse).orElse(Version.of(0));
+
+        Optional<Version> implementationVersion =
+                getImplementationVersion().map(v -> v.replace(".dirty", "")).flatMap(Version::tryParse);
+
+        if (implementationVersion.isEmpty()) {
             return true;
         }
 
-        OrderableSlsVersion injectedVersion = OrderableSlsVersion.valueOf(formatterVersion.get());
-        return injectedVersion.compareTo(implementationVersion.get()) < 0;
+        return implementationVersion.map(injectedVersion::isLowerThan).orElse(true);
     }
 
     Optional<String> getImplementationVersion() {

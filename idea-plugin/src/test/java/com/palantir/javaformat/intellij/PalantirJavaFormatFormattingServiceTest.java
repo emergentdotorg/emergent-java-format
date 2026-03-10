@@ -45,7 +45,9 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -134,8 +136,8 @@ public class PalantirJavaFormatFormattingServiceTest {
         }
 
         @Override
-        protected FormattingTask createFormattingTask(AsyncFormattingRequest request) {
-            FormattingTask delegateTask = super.createFormattingTask(request);
+        protected FormattingTask createFormattingTask(@NonNull AsyncFormattingRequest request) {
+            FormattingTask delegateTask = Objects.requireNonNull(super.createFormattingTask(request));
             return new FormattingTask() {
                 @Override
                 public boolean cancel() {
