@@ -11,6 +11,25 @@
 
   <name>emergent-java-format-parent</name>
   <description>Emergent open source project</description>
+
+  <modules>
+    <module>java-format</module>
+  </modules>
+
+  <properties>
+    <localTestRepositoryPath>${maven.multiModuleProjectDirectory}/target/testrepo</localTestRepositoryPath>
+    <mainClass>com.palantir.javaformat.java.Main</mainClass>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <version.auto-value>1.11.1</version.auto-value>
+    <version.derive4j>1.1.1</version.derive4j>
+    <version.graalvm>23.0.2</version.graalvm>
+    <version.immutables>2.12.1</version.immutables>
+    <version.slf4j>2.0.17</version.slf4j>
+  </properties>
+
   <url>https://github.com/emergentdotorg/emergent-java-format</url>
 
   <licenses>
@@ -20,40 +39,118 @@
     </license>
   </licenses>
 
-  <modules>
-    <module>java-format</module>
-    <!--<module>palantir-java-format</module>-->
-    <!--<module>palantir-java-format-jdk-bootstrap</module>-->
-    <!--<module>palantir-java-format-spi</module>-->
-  </modules>
-
   <scm>
     <connection>scm:git:git@github.com:emergentdotorg/emergent-java-format.git</connection>
     <tag>HEAD</tag>
   </scm>
 
-  <properties>
-    <mainClass>com.palantir.javaformat.java.Main</mainClass>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <localTestRepositoryPath>${maven.multiModuleProjectDirectory}/target/testrepo</localTestRepositoryPath>
-    <version.auto-value>1.11.1</version.auto-value>
-    <version.derive4j>1.1.1</version.derive4j>
-    <version.graalvm>23.0.2</version.graalvm>
-    <version.immutables>2.12.1</version.immutables>
-    <version.slf4j>2.0.17</version.slf4j>
-  </properties>
-
-  <profiles>
-    <profile>
-      <id>native</id>
-      <modules>
-        <module>palantir-java-format-native</module>
-      </modules>
-    </profile>
-  </profiles>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.github.ekryd.sortpom</groupId>
+          <artifactId>sortpom-maven-plugin</artifactId>
+          <version>4.0.0</version>
+          <configuration>
+            <sortOrderFile>${maven.multiModuleProjectDirectory}/sortpom.xml</sortOrderFile>
+            <createBackupFile>false</createBackupFile>
+            <expandEmptyElements>false</expandEmptyElements>
+            <lineSeparator>\n</lineSeparator>
+            <sortDependencies>scope,groupId,artifactId</sortDependencies>
+            <sortDependencyExclusions>groupId,artifactId</sortDependencyExclusions>
+            <sortDependencyManagement>scope,groupId,artifactId</sortDependencyManagement>
+            <sortModules>true</sortModules>
+            <sortPlugins>groupId,artifactId</sortPlugins>
+            <sortProperties>true</sortProperties>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.15.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.10.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>3.6.2</version>
+          <configuration>
+            <rules>
+              <requireMavenVersion>
+                <version>3.6.3</version>
+              </requireMavenVersion>
+            </rules>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.1.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>3.6.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.5.5</version>
+          <configuration>
+            <argLine>--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+              --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</argLine>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-toolchains-plugin</artifactId>
+          <version>3.2.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.6.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.6.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.openrewrite.maven</groupId>
+          <artifactId>rewrite-maven-plugin</artifactId>
+          <version>6.8.0</version>
+          <configuration>
+            <activeRecipes>
+              <recipe>org.emergent.GeneralCleanup</recipe>
+            </activeRecipes>
+            <exportDatatables>true</exportDatatables>
+          </configuration>
+          <dependencies>
+            <dependency>
+              <groupId>org.openrewrite.recipe</groupId>
+              <artifactId>rewrite-java-dependencies</artifactId>
+              <version>1.31.0</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 
   <dependencyManagement>
     <dependencies>
@@ -264,112 +361,13 @@
     </dependencies>
   </dependencyManagement>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>com.github.ekryd.sortpom</groupId>
-          <artifactId>sortpom-maven-plugin</artifactId>
-          <version>4.0.0</version>
-          <configuration>
-            <sortOrderFile>${maven.multiModuleProjectDirectory}/sortpom.xml</sortOrderFile>
-            <createBackupFile>false</createBackupFile>
-            <expandEmptyElements>false</expandEmptyElements>
-            <lineSeparator>\n</lineSeparator>
-            <sortDependencies>scope,groupId,artifactId</sortDependencies>
-            <sortDependencyExclusions>groupId,artifactId</sortDependencyExclusions>
-            <sortDependencyManagement>scope,groupId,artifactId</sortDependencyManagement>
-            <sortModules>true</sortModules>
-            <sortPlugins>groupId,artifactId</sortPlugins>
-            <sortProperties>true</sortProperties>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.15.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.10.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.6.2</version>
-          <configuration>
-            <rules>
-              <requireMavenVersion>
-                <version>3.6.3</version>
-              </requireMavenVersion>
-            </rules>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.1.4</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.2.2</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-shade-plugin</artifactId>
-          <version>3.6.2</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.5.5</version>
-          <configuration>
-            <argLine>--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
-              --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
-              --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
-              --add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
-              --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
-              --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
-              --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</argLine>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-toolchains-plugin</artifactId>
-          <version>3.2.0</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>build-helper-maven-plugin</artifactId>
-          <version>3.6.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>3.6.3</version>
-        </plugin>
-        <plugin>
-          <groupId>org.openrewrite.maven</groupId>
-          <artifactId>rewrite-maven-plugin</artifactId>
-          <version>6.8.0</version>
-          <configuration>
-            <activeRecipes>
-              <recipe>org.emergent.GeneralCleanup</recipe>
-            </activeRecipes>
-            <exportDatatables>true</exportDatatables>
-          </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>org.openrewrite.recipe</groupId>
-              <artifactId>rewrite-java-dependencies</artifactId>
-              <version>1.31.0</version>
-            </dependency>
-          </dependencies>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
+  <profiles>
+    <profile>
+      <id>native</id>
+      <modules>
+        <module>palantir-java-format-native</module>
+      </modules>
+    </profile>
+  </profiles>
 
 </project>
