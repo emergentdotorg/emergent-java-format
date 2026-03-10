@@ -16,8 +16,6 @@
 
 package com.palantir.javaformat.intellij;
 
-import static java.lang.String.format;
-
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import com.google.common.annotations.VisibleForTesting;
@@ -67,8 +65,9 @@ final class FormatterProvider {
     @SuppressWarnings("for-rollout:deprecation")
     static IdeaPluginDescriptor getPluginDescriptor() {
         IdeaPluginDescriptor desc = Arrays.stream(PluginManager.getPlugins())
-                        .filter(p -> p.getPluginId().equals(PluginId.getId(PLUGIN_ID)))
-                        .findFirst().orElse(null);
+                .filter(p -> p.getPluginId().equals(PluginId.getId(PLUGIN_ID)))
+                .findFirst()
+                .orElse(null);
         return Preconditions.checkNotNull(desc, "Couldn't find our own plugin: %s", PLUGIN_ID);
     }
 
@@ -132,7 +131,7 @@ final class FormatterProvider {
         IdeaPluginDescriptor ourPlugin = getPluginDescriptor();
         @SuppressWarnings("for-rollout:deprecation")
         Path implDir = ourPlugin.getPluginPath().resolve("impl");
-        log.debug("Using emergent-java-format implementation bundled with plugin: {}", implDir);
+        log.debug("Using java-format implementation bundled with plugin: {}", implDir);
         return listDirAsUrlsUnchecked(implDir);
     }
 

@@ -42,7 +42,7 @@ import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCCompilationUnit;
 import com.sun.tools.javac.tree.JCTree.JCFieldAccess;
 import com.sun.tools.javac.tree.JCTree.JCIdent;
-import com.sun.tools.javac.tree.JCTree.JCImport;
+import com.sun.tools.javac.tree.JCTree.JCImportBase;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.Options;
 import java.lang.reflect.Method;
@@ -226,7 +226,7 @@ public class RemoveUnusedImports {
             Set<String> usedNames,
             Multimap<String, Range<Integer>> usedInJavadoc) {
         RangeMap<Integer, String> replacements = TreeRangeMap.create();
-        for (JCImport importTree : unit.getImports()) {
+        for (JCImportBase importTree : unit.getImports()) {
             String simpleName = getSimpleName(importTree);
             if (!isUnused(unit, usedNames, usedInJavadoc, importTree, simpleName)) {
                 continue;

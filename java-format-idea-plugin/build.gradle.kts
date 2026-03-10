@@ -1,5 +1,8 @@
 import com.github.javaparser.printer.concretesyntaxmodel.CsmElement.token
+import com.jetbrains.plugin.structure.base.utils.contentBuilder.buildDirectory
+import org.gradle.kotlin.dsl.support.unzipTo
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import kotlin.collections.unzip
 
 plugins {
     //id("java")
@@ -23,7 +26,6 @@ repositories {
     mavenLocal()
     intellijPlatform { defaultRepositories() }
 }
-
 
 java {
     toolchain {
@@ -64,6 +66,9 @@ tasks { runIde { jvmArgumentProviders += CommandLineArgumentProvider { gjfRequir
 
 tasks { withType<Test>().configureEach { jvmArgs(gjfRequiredJvmArgs) } }
 
+val testResourcesRuntime by configurations.creating
+val depTestResDir by extra("${buildDirectory()}/generated/test-resources")
+
 dependencies {
     intellijPlatform {
         //intellijIdeaCommunity("2024.3")
@@ -80,6 +85,7 @@ dependencies {
     implementation("com.github.zafarkhaja:java-semver:0.10.2")
     implementation("org.jspecify:jspecify:1.0.0")
     // https://mvnrepository.com/artifact/junit/junit
+    //testImplementation("org.emergent.javaformat:java-format:${javaFormatVersion}:tests")
     testImplementation("junit:junit:4.13.2")
     // https://mvnrepository.com/artifact/com.google.truth/truth
     testImplementation("com.google.truth:truth:1.4.5")
@@ -92,6 +98,18 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testResourcesRuntime("org.emergent.javaformat:java-format:${javaFormatVersion}:tests")
+
+}
+
+tasks.withType<Test> {
+    dependsOn("unzip")
+}
+
+tasks.register("unzip") {
+    testResourcesRuntime.asFileTree.forEach {
+        unzipTo(File(depTestResDir), it)
+    }
 }
 
 tasks.test {

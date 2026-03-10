@@ -14,6 +14,7 @@
     <mainClass>com.palantir.javaformat.java.Main</mainClass>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
+    <!--<maven.compiler.release>${maven.compiler.target}</maven.compiler.release>-->
     <nativeImageName>emergent-java-format-${os.name}_${os.arch}</nativeImageName>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -78,6 +79,27 @@
             </manifest>
           </archive>
         </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.4.0</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -222,7 +244,7 @@
                   <goal>select-jdk-toolchain</goal>
                 </goals>
                 <configuration>
-                  <version>[23)</version>
+                  <version>[23,24)</version>
                   <vendor>GraalVM Community</vendor>
                 </configuration>
               </execution>

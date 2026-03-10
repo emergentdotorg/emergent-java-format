@@ -26,7 +26,10 @@ import com.sun.tools.javac.parser.Tokens.Comment.CommentStyle;
 import com.sun.tools.javac.parser.Tokens.Token;
 import com.sun.tools.javac.parser.Tokens.TokenKind;
 import com.sun.tools.javac.parser.UnicodeReader;
+import com.sun.tools.javac.tree.EndPosTable;
 import com.sun.tools.javac.util.Context;
+import com.sun.tools.javac.util.JCDiagnostic.DiagnosticPosition;
+import com.sun.tools.javac.util.JCDiagnostic.SimpleDiagnosticPosition;
 import java.util.Set;
 
 /** A wrapper around javac's lexer. */
@@ -190,6 +193,16 @@ class JavacTokens {
                 this.text = text = new String(reader.getRawCharacters());
             }
             return text;
+        }
+
+        @Override
+        public DiagnosticPosition getPos() {
+            return new SimpleDiagnosticPosition(pos) {
+                @Override
+                public int getEndPosition(EndPosTable endPosTable) {
+                    return endPos;
+                }
+            };
         }
 
         /**

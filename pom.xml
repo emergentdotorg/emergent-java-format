@@ -103,6 +103,11 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.4.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>3.5.5</version>
           <configuration>
@@ -361,6 +366,7 @@
     </dependencies>
   </dependencyManagement>
 
+  <!--
   <profiles>
     <profile>
       <id>native</id>
@@ -369,5 +375,6 @@
       </modules>
     </profile>
   </profiles>
+  -->
 
 </project>
