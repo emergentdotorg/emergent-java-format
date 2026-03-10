@@ -21,9 +21,10 @@
   </licenses>
 
   <modules>
-    <module>palantir-java-format</module>
-    <module>palantir-java-format-jdk-bootstrap</module>
-    <module>palantir-java-format-spi</module>
+    <module>java-format</module>
+    <!--<module>palantir-java-format</module>-->
+    <!--<module>palantir-java-format-jdk-bootstrap</module>-->
+    <!--<module>palantir-java-format-spi</module>-->
   </modules>
 
   <scm>
@@ -271,7 +272,7 @@
           <artifactId>sortpom-maven-plugin</artifactId>
           <version>4.0.0</version>
           <configuration>
-            <sortOrderFile>${user.home}/.m2/sortpom.xml</sortOrderFile>
+            <sortOrderFile>${maven.multiModuleProjectDirectory}/sortpom.xml</sortOrderFile>
             <createBackupFile>false</createBackupFile>
             <expandEmptyElements>false</expandEmptyElements>
             <lineSeparator>\n</lineSeparator>
