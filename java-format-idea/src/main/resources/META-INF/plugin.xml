@@ -1,16 +1,22 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
-<idea-plugin>
-    <id>org.emergent.javaformat</id>
-    <name>Emergent Java Formatter</name>
-    <vendor>Emergent.org</vendor>
+<idea-plugin url="https://github.com/emergentdotorg/emergent-java-format" require-restart="true">
+  <id>emergent-java-format</id>
+  <name>Emergent Java Formatter</name>
+  <vendor url="https://github.com/emergentdotorg/emergent-java-format">Emergent.org</vendor>
 
-    <depends>com.intellij.modules.idea</depends>
+  <depends>com.intellij.modules.java</depends>
+  <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.platform</depends>
 
+  <extensions defaultExtensionNs="com.intellij">
+    <formattingService implementation="com.palantir.javaformat.intellij.PalantirJavaFormatFormattingService"/>
+    <projectConfigurable instance="com.palantir.javaformat.intellij.PalantirJavaFormatConfigurable"
+                         id="emergent-java-format.settings"
+                         displayName="Emergent Java Formatter Settings"
+                         nonDefaultProject="true"/>
+    <projectService serviceImplementation="com.palantir.javaformat.intellij.PalantirJavaFormatSettings"/>
+    <postStartupActivity implementation="com.palantir.javaformat.intellij.InitialConfigurationStartupActivity"/>
+    <notificationGroup displayType="BALLOON" id="emergent-java-format parsing error"
+                       isLogByDefault="false"/>
+  </extensions>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="org.jetbrains.plugins.template.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="org.jetbrains.plugins.template.startup.MyProjectActivity" />
-    </extensions>
 </idea-plugin>
