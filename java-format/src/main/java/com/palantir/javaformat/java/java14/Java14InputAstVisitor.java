@@ -87,7 +87,7 @@ public class Java14InputAstVisitor extends JavaInputAstVisitor {
     @Override
     protected List<? extends Tree> getPermitsClause(ClassTree node) {
         if (CLASS_TREE_GET_PERMITS_CLAUSE != null) {
-            return (List<? extends Tree>) invoke(CLASS_TREE_GET_PERMITS_CLAUSE, node);
+            return invoke(CLASS_TREE_GET_PERMITS_CLAUSE, node);
         } else {
             // Java < 15
             return super.getPermitsClause(node);
@@ -263,7 +263,7 @@ public class Java14InputAstVisitor extends JavaInputAstVisitor {
         List<? extends Tree> labels;
         boolean isDefault;
         if (CASE_TREE_GET_LABELS != null) {
-            labels = (List<? extends Tree>) invoke(CASE_TREE_GET_LABELS, node);
+            labels = invoke(CASE_TREE_GET_LABELS, node);
             isDefault = labels.size() == 1
                     && Iterables.getOnlyElement(labels).getKind().name().equals("DEFAULT_CASE_LABEL");
         } else {
@@ -360,9 +360,10 @@ public class Java14InputAstVisitor extends JavaInputAstVisitor {
         }
     }
 
-    private static Object invoke(Method m, Object target) {
+    @SuppressWarnings("unchecked")
+    private static <T> T invoke(Method m, Object target) {
         try {
-            return m.invoke(target);
+            return (T) m.invoke(target);
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
