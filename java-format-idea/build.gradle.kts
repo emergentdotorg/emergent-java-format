@@ -1,12 +1,17 @@
+import com.github.javaparser.printer.concretesyntaxmodel.CsmElement.token
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 
 plugins {
-    id("java") // Java support
-
-    id("org.jetbrains.kotlin.jvm") version "2.1.20"
-    id("org.jetbrains.intellij.platform") version "2.10.2"
+    //id("java") // Java support
+    java
+    //`java-library`
+    kotlin("jvm") version "2.3.20"
+    //id("org.jetbrains.kotlin.jvm") version "2.1.20"
+    //id("org.jetbrains.intellij.platform") version "2.10.2"
+    id("org.jetbrains.intellij.platform") version "2.13.1"
 
     //alias(libs.plugins.kotlin) // Kotlin support
     //alias(libs.plugins.intelliJPlatform) // IntelliJ Platform Gradle Plugin
@@ -27,15 +32,13 @@ tasks {
     }
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
-    }
-}
 
 // Set the JVM language level used to build the project.
 kotlin {
     jvmToolchain(21)
+    //compilerOptions {
+    //    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    //}
 }
 
 // Configure project's dependencies
@@ -200,7 +203,8 @@ tasks {
     }
 
     runIde {
-        jvmArgumentProviders += CommandLineArgumentProvider { gjfRequiredJvmArgs }
+        jvmArgs.addAll(gjfRequiredJvmArgs)
+        //jvmArgumentProviders += CommandLineArgumentProvider { gjfRequiredJvmArgs }
     }
 }
 
@@ -212,14 +216,16 @@ intellijPlatformTesting {
     runIde {
         register("runIdeForUiTests") {
             task {
-                jvmArgumentProviders += CommandLineArgumentProvider {
+                jvmArgs.addAll(
+                //jvmArgumentProviders += CommandLineArgumentProvider {
                     listOf(
                         "-Drobot-server.port=8082",
                         "-Dide.mac.message.dialogs.as.sheets=false",
                         "-Djb.privacy.policy.text=<!--999.999-->",
                         "-Djb.consents.confirmation.enabled=false",
                     )
-                }
+                //}
+                )
             }
 
             plugins {
