@@ -21,7 +21,7 @@ plugins {
 }
 
 group = providers.gradleProperty("pluginGroup").get()
-version = providers.gradleProperty("pluginVersion").get()
+//version = providers.gradleProperty("pluginVersion").get()
 val javaFormatVersion = providers.gradleProperty("javaFormatVersion").get()
 
 configurations {
@@ -148,7 +148,8 @@ intellijPlatform {
     pluginConfiguration {
 
         name = providers.gradleProperty("pluginName")
-        version = providers.gradleProperty("pluginVersion")
+//        version = providers.gradleProperty("pluginVersion")
+        version = project.version.toString()
 
         // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
         description = providers.fileContents(layout.projectDirectory.file("README.md")).asText.map {
@@ -165,7 +166,7 @@ intellijPlatform {
 
         val changelog = project.changelog // local variable for configuration cache compatibility
         // Get the latest available change notes from the changelog file
-        changeNotes = providers.gradleProperty("pluginVersion").map { pluginVersion ->
+        changeNotes =  version.map { pluginVersion ->
             with(changelog) {
                 renderItem(
                     (getOrNull(pluginVersion) ?: getUnreleased())
