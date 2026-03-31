@@ -1,0 +1,10 @@
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: org.emergent.GeneralCleanup
+displayName: Emergent General Cleanup
+description: Fix package and maven coordinates among other things
+recipeList:
+  - org.openrewrite.java.ChangePackage:
+      oldPackageName: com.palantir
+      newPackageName: org.emergent
+      recursive: true

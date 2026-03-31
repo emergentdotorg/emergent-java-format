@@ -1,0 +1,90 @@
+bhuildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+
+    dependencies {
+        classpath 'com.palantir.jakartapackagealignment:jakarta-package-alignment:0.6.0'
+        classpath 'com.gradle.publish:plugin-publish-plugin:2.1.0'
+        classpath 'com.palantir.baseline-error-prone:gradle-baseline-error-prone:0.7.0'
+        classpath 'com.palantir.baseline:gradle-baseline-java:6.80.0'
+        classpath 'com.palantir.gradle.consistentversions:gradle-consistent-versions:3.13.0'
+        classpath 'com.palantir.gradle.externalpublish:gradle-external-publish-plugin:1.35.0'
+        classpath 'com.palantir.gradle.failure-reports:gradle-failure-reports:1.18.0'
+        classpath 'com.palantir.gradle.gitversion:gradle-git-version:5.0.0'
+        classpath 'com.palantir.gradle.guide:gradle-guide:1.27.0'
+        classpath 'com.palantir.gradle.idea-configuration:gradle-idea-configuration:0.8.0'
+        classpath 'com.palantir.gradle.idea-language-injector:gradle-idea-language-injector:0.2.0'
+        classpath 'com.palantir.gradle.jdks:gradle-jdks:0.76.0'
+        classpath 'com.palantir.gradle.jdkslatest:gradle-jdks-latest:0.26.0'
+        classpath 'com.palantir.gradle.plugintesting:gradle-plugin-testing:0.54.0'
+        classpath 'com.palantir.javaformat:gradle-palantir-java-format:2.89.0'
+        classpath 'com.palantir.suppressible-error-prone:gradle-suppressible-error-prone:2.28.0'
+        classpath 'me.champeau.jmh:jmh-gradle-plugin:0.7.3'
+        classpath 'org.revapi:gradle-revapi:1.8.0'
+    }
+}
+
+apply plugin: 'com.palantir.external-publish'
+apply plugin: 'com.palantir.failure-reports'
+apply plugin: 'com.palantir.git-version'
+apply plugin: 'com.palantir.gradle-guide'
+apply plugin: 'com.palantir.idea-language-injector'
+apply plugin: 'com.palantir.jdks'
+apply plugin: 'com.palantir.jdks.latest'
+apply plugin: 'com.palantir.baseline'
+apply plugin: 'com.palantir.baseline-error-prone-root'
+apply plugin: 'com.palantir.baseline-java-versions'
+apply plugin: 'com.palantir.consistent-versions'
+apply plugin: 'com.palantir.baseline-java-versions'
+
+version System.env.CIRCLE_TAG ?: gitVersion()
+
+allprojects {
+    apply plugin: 'com.palantir.baseline-null-away'
+    apply plugin: 'com.palantir.java-format'
+    apply plugin: 'com.palantir.jakarta-package-alignment'
+    group = 'com.palantir.javaformat'
+    version = rootProject.version
+
+    repositories {
+        mavenCentral() { metadataSources { mavenPom(); ignoreGradleMetadataRedirection() } }
+        gradlePluginPortal()
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    tasks.withType(Checkstyle).configureEach {
+        enabled = false
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.errorprone.disable 'PreconditionsConstantMessage', 'PreferSafeLoggableExceptions', 'PreferSafeLoggingPreconditions'
+        options.errorprone.disable 'StrictUnusedVariable'
+    }
+
+    // Run `./gradlew test -Drecreate=true` to recreate all the expected
+    // generated code that we have checked into the repo.
+    tasks.withType(Test).configureEach {
+        systemProperty 'recreate', System.getProperty('recreate', 'false')
+    }
+}
+
+javaVersions {
+    libraryTarget = 17
+    runtime = 21
+}
+
+jdks {
+    daemonTarget = 21
+
+    jdk(23) {
+        distribution = 'graalvm-ce'
+        jdkVersion = '23.0.1'
+    }
+
+    jdkMajorVersionsToUse().add(JavaLanguageVersion.of("23"))
+}
